@@ -1,0 +1,28 @@
+Read Me
+
+This little program renames audio files to what is actually said in the file. It's intended for use in video game development, where there can be hundreds or thousands of short dialog lines. This program uses speech-to-text to "listen" to the audio file, then generate text. The speech-to-text api used is Google Web Speech, which requires an online connection.
+
+This program also formats the text in various ways. Currently, it capitalizes each word and removes spaces, resulting in files that look like "HowAreYou.wav". The program also currently limits the file name to 50 characters. More options and flexibility are planned.
+
+Planned features:
+-batch renaming
+-optional prefixes and suffixes
+-easy to access variables for options
+	-file name length limit (int)
+	-prefix (str)
+	-suffix (str)
+	-camel case (bool) (combine capitalize each word and remove spaces)
+-basic UI
+-choose different output path
+-drag and drop files?!
+
+This program was written with Python 3.
+Download the latest version of Python 3 here:
+https://www.python.org/downloads/
+
+This program uses the Speech Recognition library.
+To download it, open Terminal or Cmd Line and run this line:
+pip install SpeechRecognition
+
+Learn more about the Speech Recognition Library here:
+https://pypi.org/project/SpeechRecognition/
