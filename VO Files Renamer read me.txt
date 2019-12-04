@@ -1,28 +1,58 @@
-Read Me
+VO Files Renamer - Read Me
 
-This little program renames audio files to what is actually said in the file. It's intended for use in video game development, where there can be hundreds or thousands of short dialog lines. This program uses speech-to-text to "listen" to the audio file, then generate text. The speech-to-text api used is Google Web Speech, which requires an online connection.
+=== Quick Instructions ===
 
-This program also formats the text in various ways. Currently, it capitalizes each word and removes spaces, resulting in files that look like "HowAreYou.wav". The program also currently limits the file name to 50 characters. More options and flexibility are planned.
+Place this Python file in the same folder as the audio file(s) you want to rename.
+
+The file you want to rename must start out named as "01.wav".
+
+Adjust the variables above as needed for you project.
+For the prefix and suffix variables, be sure to include
+    apostrophes or quotation marks at the beginning and
+    end of your values. For example:
+    prefix = 'Narrator_'
+FileNameLength is used to limit the size of your file name,
+    measured in characters.
+    This variable does not take into account the prefix or suffix.
+If camelCase is set to True, then each word will be
+    capitalized and all spaces removed. For example:
+    "How are you.wav" becomes "HowAreYou.wav"
+
+=== What you need to download ===
+
+
+
+This program is written in Python 3. If you don't already have Python installed on your computer, you can download it here:
+https://www.python.org/downloads/
+
+This program uses the Speech Recognition library.
+To download this library, open Terminal or Cmd Line and run this line (install Python first):
+pip install SpeechRecognition
+
+=== Information about this program ==
+
+This little program renames audio files to what is actually said in the file. It's intended for use in video game development, where there can be hundreds or thousands of short dialog lines. 
+This program uses speech-to-text to "listen" to the audio file, then generate text. The speech-to-text api used is Google Web Speech, which requires an online connection.
+
+This program also formats the text in various ways. You have the option to:
+-add prefixes or suffixes to the file name
+-limit the length of the file name (measured in characters)
+-camel case: capitalize each word and remove spaces
 
 Planned features:
 -batch renaming
--optional prefixes and suffixes
--easy to access variables for options
-	-file name length limit (int)
-	-prefix (str)
-	-suffix (str)
-	-camel case (bool) (combine capitalize each word and remove spaces)
 -basic UI
 -choose different output path
 -drag and drop files?!
 
-This program was written with Python 3.
-Download the latest version of Python 3 here:
-https://www.python.org/downloads/
-
-This program uses the Speech Recognition library.
-To download it, open Terminal or Cmd Line and run this line:
-pip install SpeechRecognition
-
 Learn more about the Speech Recognition Library here:
 https://pypi.org/project/SpeechRecognition/
+
+VO Files Renamer is written by Troy Andrews. I can be reached on Twitter, @TroysNoize. 
+
+=== Donate ===
+
+If this program has been useful to you, please donate a few dollars my way.
+
+paypal.me/troysnoize
+cash.app/$TAG13

@@ -1,9 +1,22 @@
-import speech_recognition as sr
-import string
-import os
+#variables
+prefix = 'prefix-test_'
+suffix = '_suffix-test'
+fileNameLength = 50
+camelCase = True
 
 """
-this program uses Google Web Speech API
+Quick Instructions:
+Adjust the variables above as needed for you project.
+For the prefix and suffix variables, be sure to include
+    apostrophes or quotation marks at the beginning and
+    end of your values. For example:
+    prefix = 'Narrator_'
+FileNameLength is used to limit the size of your file name,
+    measured in characters.
+    This variable does not take into account the prefix or suffix.
+If camelCase is set to True, then each word will be
+    capitalized and all spaces removed. For example:
+    "How are you.wav" becomes "HowAreYou.wav"
 
 "Caution: The default key provided by SpeechRecognition is for
 testing purposes only, and Google may revoke it at any time.
@@ -25,17 +38,23 @@ Alternative options:
 
 https://realpython.com/python-speech-recognition/
 """
-print (sr.__version__)
 
+import speech_recognition as sr
+import string
+import os
+import urllib.error
+
+#trying to batch rename files over here
 
 """
-#trying to batch rename files over here
 def main(): 
-    i = 1
+    i = 0
       
-    for filename in os.listdir("audio_files"): 
-        i = sr.AudioFile(str(i) + '.wav')
-        with i as source:
+    for filename in os.path.join(path.dirname(path.realpath(__file__)), file):
+        #AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "english.wav")
+        file = filename
+        r = sr.Recognizer()
+        with sr.file as source:
             audio = r.record(source)
         #sends the text off to Google's elves. Requires internet connection. 
         text = r.recognize_google(audio)
@@ -60,32 +79,44 @@ if __name__ == '__main__':
       
     # Calling main() function 
     main()
-    """
+    
+"""
 
+try:
+    # obtain path to "01.wav" in the same folder as this script
+    from os import path
+    AUDIO_FILE = os.path.join(path.dirname(path.realpath(__file__)), "01.wav")
 
+    r = sr.Recognizer()
 
-# obtain path to "unnamed.wav" in the same folder as this script
-from os import path
-AUDIO_FILE = os.path.join(path.dirname(path.realpath(__file__)), "unnamed.wav")
+    unnamed = sr.AudioFile('01.wav')
+    with unnamed as source:
+        audio = r.record(source)
+    #sends the text off to Google's elves. Requires internet connection. 
+    text = r.recognize_google(audio)
 
-r = sr.Recognizer()
+    if camelCase == True:
+        #string.capwords capitalizes the first character of every word in a string
+        text = (string.capwords (text))
 
-unnamed = sr.AudioFile('unnamed.wav')
-with unnamed as source:
-    audio = r.record(source)
-#sends the text off to Google's elves. Requires internet connection. 
-text = r.recognize_google(audio)
+        # .replace is used here to remove all the spaces
+        text = text.replace(" ", "")
 
-#string.capwords capitalizes the first character of every word in a string
-text = (string.capwords (text))
+    #Slicing the string. Limiting the string to 50 characters
+    text = text[0:(fileNameLength +1)]
 
-# .replace is used here to remove all the spaces
-text = text.replace(" ", "")
+    print (prefix + text + suffix)
 
-#Slicing the string. Limiting the string to 50 characters
-text = text[0:51]
+    os.rename ('01.wav', prefix + text + suffix + '.wav')
 
-print (text)
+    print ('Done!')
 
-os.rename ('unnamed.wav', text + '.wav')
+#error handling
+except FileNotFoundError:
+    print ("Could not find the file to rename. Try renaming the file to \"01.wav\"")
 
+except urllib.error.HTTPError:
+    print ("Speech-to-text failed. Is the file a clean recording of spoken dialog? Is your file under a 60 seconds long? Is your internet connection working?")
+
+except sr.RequestError as e:
+    print ("Speech-to-text failed. Is the file a clean recording of spoken dialog? Is your file under a 60 seconds long? Is your internet connection working?")
