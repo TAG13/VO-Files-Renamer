@@ -45,6 +45,16 @@ https://pypi.org/project/SpeechRecognition/
 
 VO Files Renamer is written by Troy Andrews. I can be reached on Twitter, @TroysNoize. 
 
+=== Google Cloud Speech ===
+
+If you decide to use Google Cloud Speech, you will need to install Google's Cloud Speech API for python, which you can do by running this command in the Cmd line or Terminal.
+
+You will also need your own API key. Instruction for how to sign up and get your own individual key are here:
+https://github.com/Uberi/speech_recognition/blob/master/reference/library-reference.rst
+
+In order to use the key you need to download oauth2client. Run this command in Cmd Line or Terminal:
+pip install oauth2client
+
 === Donate ===
 
 If this program has been useful to you, please donate a few dollars my way.

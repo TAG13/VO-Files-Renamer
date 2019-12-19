@@ -1,6 +1,6 @@
 #variables
-prefix = ''
-suffix = ''
+prefix = 'prefix-test_'
+suffix = '_suffix-test'
 fileNameLength = 50
 camelCase = True
 
@@ -48,25 +48,32 @@ import speech_recognition as sr
 import string
 import os
 import urllib.error
-from pprint import pprint
 from os import path
+
+#Can be ignored if you're not using your own Google Cloud Speech key.
+google_cloud_credential = r"""PASTE THE CONTENTS OF THE GOOGLE CLOUD SPEECH JSON CREDENTIALS FILE HERE"""
 
 i = 0
 
 for filename in os.listdir():
-    if filename.endswith((".wav", ".flac", ".aiff", ".aif")): #endswith can accept tuples
+    if filename.endswith(".wav" or ".flac" or ".aiff"):
         #saves the file extension
-        origName = filename
-        ext = os.path.splitext (filename)[1] #splitext splits the root from the extension. [0] is root, [1] is extension.
+        ext = os.path.splitext (filename)[1]
+        original = filename
         try:
             AUDIO_FILE = os.path.join(path.dirname(path.realpath(__file__)), filename)
             r = sr.Recognizer()
             unnamed = sr.AudioFile(filename)
             with unnamed as source:
                 audio = r.record(source)
-            #sends the text off to Google's elves. Requires internet connection. 
+                
+            #=== Send the text off to Google's elves. Requires internet connection. === 
+            #default api key. Just works. Good for testing.
             text = r.recognize_google(audio)
-
+                
+            #Google Cloud Speech. Need your own credential key from Google.
+            #text = r.recognize_google_cloud(audio, credentials_json = google_cloud_credential)
+                        
             #variables for naming rules
             if camelCase == True:
                 #string.capwords capitalizes the first character of every word in a string
@@ -77,26 +84,27 @@ for filename in os.listdir():
             #Slicing the string. Limiting the string to fileNameLength
             text = text[0:(fileNameLength +1)]
 
-            pprint (origName + " --> " + prefix + text + suffix + ext)
+            print (original + " --> " + prefix + text + suffix)
             os.rename (filename, prefix + text + suffix + ext)
 
             
         #error handling
-        except FileNotFoundError:
-            pprint ("Could not find the file to rename. Try renaming the file to \"01.wav\"")
+
+        except sr.UnknownValueError:
+            print (filename + " speech-to-text failed. Is this file a clean recording of spoken dialog? Is your file under a 60 seconds long? Is your internet connection working?")
 
         except urllib.error.HTTPError:
-            pprint ("Speech-to-text failed on " + filename + ". Is this file a clean recording of spoken dialog? Is your file under 60 seconds long? Is your internet connection working?")
+            print (filename + " speech-to-text failed. Is this file a clean recording of spoken dialog? Is your file under a 60 seconds long? Is your internet connection working?")
 
         except sr.RequestError as e:
-            pprint (filename + " failed. Speech-to-text was not able to understand this audio. Is this file a clean recording of spoken dialog? Is your file under 60 seconds long? Is your internet connection working?")
+            print ((filename + " speech-to-text failed. Could not request results from Google Cloud Speech service; {0}".format(e)))
 
+        #HACKY!!
+        #If you try to open a folder instead a file, this error is thrown.
+        #Better solution is to differentiate between files and folders.
         except PermissionError:
-            pprint(filename + " failed. Do you have this file open in another program?")
+            print("")
 
-    elif filename.endswith((".ogg", ".mp3", ".aac", ".wma")):
-        pprint(filename + " cannot not be analyzed. The speech-to-text process only supports .wav, .flac, and .aiff files.")
+        i += 1  
 
-    i += 1  
-
-pprint ('Done!')
+print ('Done!')
